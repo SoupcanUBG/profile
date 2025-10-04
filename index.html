@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NotR8</title>
+  <style>
+    :root {
+      --bg: #06070a;
+      --card: #0f1720;
+      --muted: #9aa4b2;
+      --accent: #7c3aed;
+      --accent-2: #06b6d4;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background: radial-gradient(800px 400px at 50% 50%, rgba(124, 58, 237, 0.1), transparent 70%), var(--bg);
+      color: var(--muted);
+      overflow: hidden;
+    }
+
+    .cursor-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(124, 58, 237, 0.18) 0%, rgba(6, 182, 212, 0.05) 20%, transparent 40%);
+      transition: background 120ms linear;
+      z-index: 0;
+    }
+
+    .center-wrap {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+
+    .card {
+      width: min(420px, 92vw);
+      padding: 28px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.1);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.8rem;
+      color: white;
+    }
+
+    p.desc {
+      margin: 0 0 18px 0;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn.primary {
+      background: linear-gradient(90deg, var(--accent), #5b21b6);
+      color: white;
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.25);
+    }
+
+    .btn.secondary {
+      background: linear-gradient(90deg, var(--accent-2), #0891b2);
+      color: white;
+      box-shadow: 0 4px 16px rgba(6, 182, 212, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-glow" aria-hidden="true"></div>
+
+  <div class="center-wrap">
+    <div class="card">
+      <img src="picture.png" alt="Profile Picture" class="profile-pic" />
+      <h1>NotR8</h1>
+      <p class="desc">I'm a 14-year-old frontend developer who likes creating unblocked gaming sites.
+      I am currently working on  majority.</p>
+
+      <div class="actions">
+        <button class="btn primary" onclick="window.location.href='https://majority.soupcan.xyz'">Majority</button>
+        <button class="btn secondary" onclick="window.location.href='https://scripts.soupcan.xyz'">Scripts</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const glow = document.querySelector('.cursor-glow');
+    let last = { x: 50, y: 50 };
+
+    function updateGlow(xPct, yPct) {
+      glow.style.setProperty('--mouse-x', xPct + '%');
+      glow.style.setProperty('--mouse-y', yPct + '%');
+      glow.style.background = `radial-gradient(circle at ${xPct}% ${yPct}%, rgba(124,58,237,0.18) 0%, rgba(6,182,212,0.05) 20%, transparent 40%)`;
+    }
+
+    window.addEventListener('pointermove', (e) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      last.x += (x - last.x) * 0.18;
+      last.y += (y - last.y) * 0.18;
+      updateGlow(last.x.toFixed(2), last.y.toFixed(2));
+    }, { passive: true });
+
+    updateGlow(50, 50);
+  </script>
+</body>
+</html>
+
